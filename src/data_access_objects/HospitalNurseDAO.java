@@ -19,6 +19,7 @@ public class HospitalNurseDAO {
 
 	/**
 	 * inserts an unemployed nurse into the table.
+	 * 
 	 * @param nurse
 	 * @throws SQLException
 	 */
@@ -29,7 +30,7 @@ public class HospitalNurseDAO {
 		ps.setString(1, nurse);
 		// didn't input hospital; set as null.
 		ps.setNull(2, java.sql.Types.VARCHAR);
-		
+
 		ps.executeUpdate();
 
 		con.commit();
@@ -37,8 +38,10 @@ public class HospitalNurseDAO {
 		ps.close();
 
 	}
+
 	/**
 	 * builds a new hospital, with at least 1 nurse staffing it.
+	 * 
 	 * @param hospital
 	 * @param nid
 	 * @throws SQLException
@@ -50,7 +53,7 @@ public class HospitalNurseDAO {
 		ps.setString(1, hospital);
 		// didn't input hospital; set as null.
 		ps.setInt(2, nid);
-		
+
 		ps.executeUpdate();
 
 		con.commit();
@@ -61,6 +64,7 @@ public class HospitalNurseDAO {
 
 	/**
 	 * inserts a working nurse at a hospital into the table.
+	 * 
 	 * @param nurse
 	 * @param hospital
 	 * @throws SQLException
@@ -71,7 +75,7 @@ public class HospitalNurseDAO {
 
 		ps.setString(1, nurse);
 		ps.setString(2, hospital);
-		
+
 		ps.executeUpdate();
 		con.commit();
 		ps.close();
@@ -93,8 +97,10 @@ public class HospitalNurseDAO {
 		ps.close();
 
 	}
+
 	/**
 	 * demolishes a hospital.
+	 * 
 	 * @param nid
 	 * @throws SQLException
 	 */
@@ -107,18 +113,19 @@ public class HospitalNurseDAO {
 		ps.close();
 
 	}
+
 	/**
 	 * transfers a nurse to a new hospital.
+	 * 
 	 * @param nid
 	 * @throws SQLException
 	 */
 	public void updateWorkPlace(int nid) throws SQLException {
-		PreparedStatement ps = con
-				.prepareStatement("UPDATE nurse SET hospital = ?");
-		
+		PreparedStatement ps = con.prepareStatement("UPDATE nurse SET hospital = ?");
+
 		ps.setInt(1, nid);
-		//AT THIS POINT THE TRIGGER SHOULD auto-update the hospital.
-		
+		// AT THIS POINT THE TRIGGER SHOULD auto-update the hospital.
+
 		// TODO: naomi look at this code; may help with controller.
 		// int rowCount = ps.executeUpdate();
 		// if (rowCount == 0)
@@ -131,7 +138,96 @@ public class HospitalNurseDAO {
 		ps.close();
 
 	}
+	/**
+	 * puts pokemon into incubation under a nurse; as well as the relevant entries into incubator and healPokemon..
+	 * @param pid
+	 * @param nid
+	 * @param iid
+	 * @throws SQLException
+	 */
+	public void putInIncubator(int pid, int nid, int iid) throws SQLException {
+		//insert into incubation table
+		PreparedStatement ps1 = con.prepareStatement("INSERT into Incubation VALUES (?,?,?)");
+		ps1.setInt(1, pid);
+		ps1.setInt(2, nid);
+		ps1.setInt(3, iid);
+		
+		//insert into Incubator table
+		PreparedStatement ps2 = con.prepareStatement("INSERT into incubator VALUES (?,?)");
+		ps2.setInt(1, iid);
+		ps2.setInt(2, pid);
+		
+		//insert into healPokemon table
+		PreparedStatement ps3 = con.prepareStatement("INSERT into healPokemon VALUES (?,?)");
+		ps3.setInt(1, pid);
+		ps3.setInt(2, nid);
+		
+		
+		
+		ps1.executeUpdate();
+		ps2.executeUpdate();
+		ps3.executeUpdate();
+		con.commit();
+		ps1.close();
+		ps2.close();
+		ps3.close();
+	}
+	/**
+	 * takes the relevant pokemon out of incubator, as well as out of incubation and healPokemon.
+	 * @param pid
+	 * @throws SQLException
+	 */
+	public void removeFromIncubator(int pid) throws SQLException {
+		//remove from incubation table
+		PreparedStatement ps1 = con.prepareStatement("DELETE from Incubation where pid = ?");
+		ps1.setInt(1, pid);
+		
+		//remove from Incubator table
+		PreparedStatement ps2 = con.prepareStatement("DELETE from incubator where pid = ?");
+		ps2.setInt(1, pid);
+		
+		//remove from healPokemon table
+		PreparedStatement ps3 = con.prepareStatement("DELETE from healPokemon where pid = ?");
+		ps3.setInt(1, pid);
+		
+		ps1.executeUpdate();
+		ps2.executeUpdate();
+		ps3.executeUpdate();
+		con.commit();
+		ps1.close();
+		ps2.close();
+		ps3.close();
+	}
+	/**
+	 * adds a new incubator to the table.
+	 * @param iid
+	 * @throws SQLException
+	 */
+	public void addNewIncubator(int iid) throws SQLException{
+		PreparedStatement ps = con.prepareStatement("INSERT INTO incubator VALUES (?,?)");
 
+		ps.setInt(1, iid);
+		ps.setNull(2, java.sql.Types.INTEGER);
+
+		ps.executeUpdate();
+		con.commit();
+		ps.close();
+
+	}
+	/**
+	 * removes an incubator from the table.
+	 * @param iid
+	 * @throws SQLException
+	 */
+	public void removeIncubator(int iid) throws SQLException{
+		PreparedStatement ps = con.prepareStatement("DELETE FROM incubator WHERE iid = ?");
+
+		ps.setInt(1, iid);
+		ps.executeUpdate();
+		con.commit();
+		ps.close();
+
+	}	
 	/**
 	 * returns the resultSet from all the pokemon managed by 1 nurse.
 	 * 
@@ -139,16 +235,15 @@ public class HospitalNurseDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public ResultSet showPokemons(String nurse) throws SQLException {
+	public ResultSet showPokemons(int nid) throws SQLException {
 
-		PreparedStatement ps = con.prepareStatement("SELECT * FROM PokemonName WHERE pid in "
-													+ "(SELECT pid from nurseTrades WHERE nurse_name = ?)");
-		ps.setString(1, nurse);
+		PreparedStatement ps = con.prepareStatement("SELECT * FROM incubation WHERE nid = ?");
+		ps.setInt(1, nid);
 
 		ResultSet rs = ps.executeQuery();
 
 		// // get info on ResultSet
-		// TODO:naomi look at this code for controller manipulation.
+		// TODO:naomi look at this code for controller manipulation
 		// ResultSetMetaData rsmd = rs.getMetaData();
 		//
 		// // get number of columns
@@ -158,22 +253,20 @@ public class HospitalNurseDAO {
 		return rs;
 
 	}
+
 	/**
-	 * returns the resultSet from all the trainers managed by 1 nurse.
-	 * @param nurse
+	 * shows the # of pokemon each nurse is caring for.
+	 * 
 	 * @return
 	 * @throws SQLException
 	 */
-	public ResultSet showTrainers(String nurse) throws SQLException {
-
-		PreparedStatement ps = con.prepareStatement("SELECT * FROM trainer WHERE trainer_id in "
-													+ "(SELECT Trainer_id from nurseTrades WHERE nurse_name = ?)");
-		ps.setString(1, nurse);
+	public ResultSet showNurseLoad() throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT nid, count(*) FROM incubation " + "group by nid");
 
 		ResultSet rs = ps.executeQuery();
 
 		// // get info on ResultSet
-		// TODO:naomi look at this code for controller manipulation.
+		// TODO:naomi look at this code for controller manipulation
 		// ResultSetMetaData rsmd = rs.getMetaData();
 		//
 		// // get number of columns
@@ -181,7 +274,26 @@ public class HospitalNurseDAO {
 
 		ps.close();
 		return rs;
-
 	}
+	/**
+	 * shows the # of pokemon under each incubator.
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet showIncubatorLoad() throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT iid, count(*) FROM incubation " + "group by iid");
 
+		ResultSet rs = ps.executeQuery();
+
+		// // get info on ResultSet
+		// TODO:naomi look at this code for controller manipulation
+		// ResultSetMetaData rsmd = rs.getMetaData();
+		//
+		// // get number of columns
+		// int numCols = rsmd.getColumnCount();
+
+		ps.close();
+		return rs;
+	}
+	
 }

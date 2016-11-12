@@ -167,5 +167,29 @@ public class PokemonDAO {
 		ps.close();
 
 	}
+	/**
+	 * returns a list of pokemon which no trainer has.
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet wildPokemon() throws SQLException{
+		PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemonName "
+													+ "WHERE pid not in("
+													+ "SSELECT pid FROM pokemonBelongs"
+													+ "WHERE trainer_id NOT in"
+													+ "(SELECT trainer_id FROM trainer));");
+
+		ResultSet rs = ps.executeQuery();
+
+		// // get info on ResultSet
+		// TODO:naomi look at this code for controller manipulation
+		// ResultSetMetaData rsmd = rs.getMetaData();
+		//
+		// // get number of columns
+		// int numCols = rsmd.getColumnCount();
+
+		ps.close();
+		return rs;
+	}
 
 }
