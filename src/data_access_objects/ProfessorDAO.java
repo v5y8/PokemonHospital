@@ -1,4 +1,4 @@
-package DB;
+package data_access_objects;
 
 import java.sql.*;
 

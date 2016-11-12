@@ -29,9 +29,11 @@ Create table pokemonBelongs(
 		ON DELETE CASCADE);
 
 Create table professorTrades(
-	professor_name varchar(55) not null PRIMARY KEY,
+	professor_name varchar(55) not null
+,
 	pid int,
 	trainer_id int,
+	PRIMARY KEY(professor_name, pid, trainer_id),
 	FOREIGN KEY(pid) references pokemonName 
 		ON DELETE CASCADE,
 	FOREIGN KEY(trainer_id) references trainer 
@@ -50,6 +52,21 @@ Create table hospital(
 ALTER TABLE nurse
 ADD CONSTRAINT fk_hospital
 	FOREIGN KEY(hname) references hospital;
+
+CREATE or REPLACE TRIGGER nurse_work
+	BEFORE update on nurse
+	FOR EACH ROW 
+	BEGIN
+	if :new.hname<>:old.hname
+	then
+	update hospital h
+		set h.hname = :new.hname
+		where h.nid = :new.nid;		
+	end if;
+	END;
+/
+
+
 
 create table healPokemon(
 	pid int not null,

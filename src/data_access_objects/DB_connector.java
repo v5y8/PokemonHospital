@@ -1,4 +1,4 @@
-package DB;
+package data_access_objects;
 
 //We need to import the java.sql package to use JDBC
 import java.sql.*;
