@@ -1,6 +1,7 @@
 package data_access_objects;
 
 import java.sql.*;
+import java.util.*;
 
 //singleton pattern DAO for accessing data.
 public class TrainerDAO {
@@ -111,5 +112,48 @@ public class TrainerDAO {
 		return rs;
 
 	}	
+	/**
+	 * an egg for a pokemon is obtained for the trainer!
+	 * @param tid
+	 * @param pid
+	 * @throws SQLException
+	 */
+	public void obtainEgg(int tid, int pid) throws SQLException {
 
+		PreparedStatement ps = con.prepareStatement("INSERT INTO eggDeposit VALUES (?,?,?)");
+		
+		//make a timestamp
+		Timestamp timestamp = new java.sql.Timestamp(new java.util.Date().getTime());
+		
+		ps.setTimestamp(1, timestamp);
+		ps.setInt(2, pid);
+		ps.setInt(3, tid);
+		
+
+		ps.executeUpdate();
+
+		con.commit();
+
+		ps.close();
+
+	}
+	/**
+	 * discards the egg obtained at this timestamp.
+	 * @param timestamp
+	 * @throws SQLException
+	 */
+	public void discardEgg(Timestamp timestamp) throws SQLException {
+
+		PreparedStatement ps = con.prepareStatement("DELETE FROM eggDeposit where eddate = ?");
+		
+		
+		ps.setTimestamp(1, timestamp);
+		
+		ps.executeUpdate();
+
+		con.commit();
+
+		ps.close();
+
+	}
 }
