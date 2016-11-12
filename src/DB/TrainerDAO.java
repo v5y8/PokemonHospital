@@ -86,7 +86,30 @@ public class TrainerDAO {
 		ps.close();
 
 	}
+	/**
+	 * returns the resultSet of all pokemon belonging to 1 trainer.
+	 * @param tid
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet showPokemon(int tid) throws SQLException {
 
-	
+		PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemonName WHERE pid in "
+													+ "(SELECT pid from pokemonBelongs WHERE  trainer_id = ?)");
+		ps.setInt(1, tid);
+
+		ResultSet rs = ps.executeQuery();
+
+		// // get info on ResultSet
+		// TODO:naomi look at this code for controller manipulation.
+		// ResultSetMetaData rsmd = rs.getMetaData();
+		//
+		// // get number of columns
+		// int numCols = rsmd.getColumnCount();
+
+		ps.close();
+		return rs;
+
+	}	
 
 }
