@@ -49,10 +49,6 @@ Create table hospital(
 	FOREIGN KEY(nid) references nurse
 		ON DELETE CASCADE);
 
-ALTER TABLE nurse
-ADD CONSTRAINT fk_hospital
-	FOREIGN KEY(hname) references hospital;
-
 CREATE or REPLACE TRIGGER nurse_work
 	BEFORE update on nurse
 	FOR EACH ROW 
@@ -94,7 +90,6 @@ Create table Incubation(
 		ON DELETE CASCADE,
 	FOREIGN KEY(pid) references pokemonName
 		ON DELETE CASCADE);
-
 
 Create table eggDeposit( 
 	Eddate TIMESTAMP not null PRIMARY KEY,
