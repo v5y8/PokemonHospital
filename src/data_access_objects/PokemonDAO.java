@@ -116,6 +116,34 @@ public class PokemonDAO {
 		ps.close();
 
 	}
+	
+	/**
+	 * retrieve pokemon and corresponding trainer into pokemonBelongs table.
+	 * 
+	 * @param tid
+	 * @param pid
+	 * @throws SQLException
+	 */
+	public ResultSet retrievePokemons(int tid, int pid) throws SQLException {
+
+		PreparedStatement ps = con.prepareStatement("SELECT * from pokemonName where"
+													+ "pid in ("
+															+ "SELECT pid from pokemonBelongs"
+															+ "where pid = ? AND tid = ?)");
+		ps.setInt(1, pid);
+		ps.setInt(2, tid);
+		
+		ResultSet rs = ps.executeQuery();
+
+		// TODO: naomi look at this code; may help with controller.
+		// int rowCount = ps.executeUpdate();
+		// if (rowCount == 0)
+		// {
+		// System.out.println("\npokemon " + pokemon_id + " does not exist!");
+		// }
+		ps.close();
+		return rs;
+	}
 
 	/**
 	 * updates the pokemon belonging to trainers.
