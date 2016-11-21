@@ -94,4 +94,42 @@ public class HospitalNurseController {
 			return 0;
 		}
     }
+    
+    /**
+     * 
+     * @param nid
+     * @param tid
+     * @param pid
+     * @return
+     */
+    public String getDepositPokemon(int nid, int tid, int pid) {
+    	ResultSet result;
+		try {
+			result = hospitalnurseDao.getTrainerPokemon(nid, tid, pid);
+			//do something that converts ResultSet to string
+	    	String pokemon = result.getNString(0);
+	    	return pokemon;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return e.getMessage();
+		}
+    }
+    
+    /**
+     * nid1 trades pid1 for pid2 with nid2
+     * 
+     * @param tid1
+     * @param tid2
+     * @param pid1
+     * @param pid2
+     */
+    public void tradeNurse(int nid1, int nid2, int pid1, int pid2) {
+    	try {
+			hospitalnurseDao.updatePokemon(nid1, pid2);
+	    	hospitalnurseDao.updatePokemon(nid2, pid1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
+		}
+    }
 }

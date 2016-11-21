@@ -296,4 +296,49 @@ public class HospitalNurseDAO {
 		return rs;
 	}
 	
+	/**
+	 * show pokemon deposited by trainer from healPokemon table.
+	 * 
+	 * @param nid
+	 * @param tid
+	 * @param pid
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet getTrainerPokemon(int nid, int tid, int pid) throws SQLException {
+
+		PreparedStatement ps = con.prepareStatement("SELECT * from healPokemon where"
+													+ "nid = ? AND pid in ("
+															+ "SELECT pid from pokemonBel"
+															+ "ongs"
+															+ "where pid = ? AND trainer_id = ?)");
+		ps.setInt(1, nid);
+		ps.setInt(2, pid);
+		ps.setInt(3, tid);
+		
+		ResultSet rs = ps.executeQuery();
+		ps.close();
+		return rs;
+	}
+	
+	/**
+	 * updates pokemon with nurse
+	 * 
+	 * @param nid
+	 * @param pid
+	 * @throws SQLException
+	 */
+	public void updatePokemon(int nid, int pid) throws SQLException {
+		PreparedStatement ps = con.prepareStatement("UPDATE healPokemon SET nid = ? WHERE pid = ?");
+
+		ps.setInt(1, nid);
+		ps.setInt(2, pid);
+		
+		ps.executeUpdate();
+		con.commit();
+
+		ps.close();
+
+	}
+	
 }

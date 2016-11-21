@@ -132,12 +132,11 @@ public class PokemonController {
      * @param professor
      */
     public void transferPokemon(int tid1, int tid2, int pid) {
-    	pokemonControllerObject.newTrainer(tid2, pid);
-		pokemonControllerObject.removePokemon(pid, tid1);
+    	pokemonControllerObject.updateTrainers(tid2, pid);
     }
     
     /**
-     * tid1 trades pid1 for pid2 from tid2
+     * tid1 trades pid1 for pid2 with tid2
      * 
      * @param tid1
      * @param tid2
@@ -145,10 +144,8 @@ public class PokemonController {
      * @param pid2
      */
     public void tradePokemon(int tid1, int tid2, int pid1, int pid2) {
-    	pokemonControllerObject.newTrainer(tid1, pid2);
-		pokemonControllerObject.removePokemon(pid2, tid2);
-		pokemonControllerObject.newTrainer(tid2, pid1);
-		pokemonControllerObject.removePokemon(pid1, tid1);
+    	pokemonControllerObject.updateTrainers(tid1, pid2);
+		pokemonControllerObject.updateTrainers(tid2, pid1);
     }
     
 }
