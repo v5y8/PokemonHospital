@@ -203,9 +203,7 @@ public class PokemonDAO {
 	public ResultSet wildPokemon() throws SQLException{
 		PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemonName "
 													+ "WHERE pid not in("
-													+ "SSELECT pid FROM pokemonBelongs"
-													+ "WHERE trainer_id NOT in"
-													+ "(SELECT trainer_id FROM trainer));");
+													+ "SELECT pid FROM pokemonBelongs);");
 
 		ResultSet rs = ps.executeQuery();
 
