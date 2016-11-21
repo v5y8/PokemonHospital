@@ -7,19 +7,19 @@ import java.sql.*;
 public class DB_connector {
 
 	private static Connection con;
-	private static String username = "ora_v5y8";
-	private static String password = "a23002090";
-	private static String connectURL = "jdbc:oracle:thin:@localhost:1522:ug";
+	private final static String USERNAME = "ora_v5y8";
+	private final static String PASSWORD = "a23002090";
+	private final static String CONNECTURL = "jdbc:oracle:thin:@localhost:1522:ug";
 
 	public static Connection getConnection() throws SQLException {
 
 		if (con == null) {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			con = DriverManager.getConnection(connectURL, username, password);
+			con = DriverManager.getConnection(CONNECTURL, USERNAME, PASSWORD);
 		}
 
 		if (!con.isValid(10)) {
-			con = DriverManager.getConnection(connectURL, username, password);
+			con = DriverManager.getConnection(CONNECTURL, USERNAME, PASSWORD);
 		}
 		return con;
 	}
