@@ -345,4 +345,21 @@ public class HospitalNurseDAO {
 
 	}
 	
+	/**
+	 * get healtime of pid under nid
+	 * 
+	 * @param nid
+	 * @param pid
+	 */
+	public ResultSet getHealTime(int nid, int pid) throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT healdate from healPokemon WHERE nid = ? AND pid = ?");
+
+		ps.setInt(1, nid);
+		ps.setInt(2, pid);
+		
+		ResultSet rs = ps.executeQuery();
+		ps.close();
+		return rs;
+	}
+	
 }
