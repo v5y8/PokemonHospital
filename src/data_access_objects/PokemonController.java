@@ -1,10 +1,13 @@
 package data_access_objects;
 
 import java.sql.*;
+import java.util.List;
+
+import dataObjects.Pokemon;
 
 public class PokemonController {
-	private PokemonController pokemonControllerObject;
-	private PokemonDAO pokemonDao;
+	private static PokemonController pokemonControllerObject;
+	private static PokemonDAO pokemonDao;
 	
 	
 	private PokemonController(){
@@ -31,17 +34,16 @@ public class PokemonController {
      * @param pid
      * @return
      */
-    public String getPokemon(int tid, int pid) {
+    public List<Pokemon> getPokemon(int tid, int pid) {
         //ask the Dao for what you want
-    	ResultSet result;
+    	List<Pokemon> result;
 		try {
 			result = pokemonDao.retrievePokemons(tid, pid);
-			//do something that converts ResultSet to string
-	    	String pokemon = result.getNString(0);
-	    	return pokemon;
+	    	return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return e.getMessage();
+			e.printStackTrace();
+			return null;
 		}
     }
     
@@ -109,17 +111,16 @@ public class PokemonController {
      * 
      * @return
      */
-    public String uncaughtPokemon() {
+    public List<Pokemon> uncaughtPokemon() {
         //ask the Dao for what you want
-    	ResultSet result;
+    	List<Pokemon> result;
 		try {
 			result = pokemonDao.wildPokemon();
-			//do something that converts ResultSet to string
-	    	String pokemon = result.getNString(0);
-	    	return pokemon;
+	    	return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return e.getMessage();
+			e.printStackTrace();
+			return null;
 		}
     }
     

@@ -1,6 +1,10 @@
 package data_access_objects;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import dataObjects.Pokemon;
 
 public class TrainerController {
 	private TrainerController trainerControllerObject;
@@ -43,16 +47,15 @@ public class TrainerController {
      * @param tid
      * @return
      */
-    public String getPokemons(int tid) {
-    	ResultSet result;
+    public List<Pokemon> getPokemons(int tid) {
+    	List<Pokemon> result = new ArrayList<>();;
 		try {
 			result = trainerDao.showPokemon(tid);
-			//do something that converts ResultSet to string
-	    	String pokemons = result.getNString(0);
-	    	return pokemons;
+	    	return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return e.getMessage();
+			e.printStackTrace();
+			return null;
 		}
     }
     

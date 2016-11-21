@@ -3,6 +3,9 @@ package data_access_objects;
 import java.sql.*;
 import java.util.*;
 
+import dataObjects.Egg;
+import dataObjects.Pokemon;
+
 //singleton pattern DAO for accessing data.
 public class TrainerDAO {
 	private Connection con;
@@ -93,23 +96,26 @@ public class TrainerDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public ResultSet showPokemon(int tid) throws SQLException {
+	public List<Pokemon> showPokemon(int tid) throws SQLException {
 
 		PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemonName WHERE pid in "
 													+ "(SELECT pid from pokemonBelongs WHERE  trainer_id = ?)");
 		ps.setInt(1, tid);
 
 		ResultSet rs = ps.executeQuery();
-
-		// // get info on ResultSet
-		// TODO:naomi look at this code for controller manipulation.
-		// ResultSetMetaData rsmd = rs.getMetaData();
-		//
-		// // get number of columns
-		// int numCols = rsmd.getColumnCount();
-
+		List<Pokemon> toReturn = new ArrayList<Pokemon>();
+		while(rs.next()){
+			int pid = rs.getInt("PID");
+			String pname = rs.getString("PNAME");
+			int cp = rs.getInt("CP");
+			int hp = rs.getInt("HP");
+			String pokeball = rs.getString("POKEBALL");
+			Pokemon pokemon = new Pokemon(pid, pname, cp, hp, pokeball);
+			toReturn.add(pokemon);
+		}
+		
 		ps.close();
-		return rs;
+		return toReturn;
 
 	}	
 	/**
@@ -136,6 +142,28 @@ public class TrainerDAO {
 
 		ps.close();
 
+	}
+	/**
+	 * views the eggs a trainer has.
+	 * @param tid the trainer id;
+	 * @return
+	 */
+	public List<Egg> viewEgg(int tid) throws SQLException{
+		PreparedStatement ps = con.prepareStatement("SELECT * FROM eggDeposit where trainer_id=?");
+		ps.setInt(1, tid);
+		ResultSet rs = ps.executeQuery();
+		
+		List<Egg> toReturn = new ArrayList<>();
+		
+		while(rs.next()){
+			Timestamp timestamp = rs.getTimestamp("EDDATE");
+			int pid = rs.getInt("PID");
+			int trainer_id = rs.getInt("TRAINER_ID");
+			Egg egg = new Egg(timestamp, pid, trainer_id);
+			toReturn.add(egg);
+		}
+		ps.close();
+		return toReturn;
 	}
 	/**
 	 * discards the egg obtained at this timestamp.

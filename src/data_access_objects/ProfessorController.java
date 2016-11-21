@@ -1,10 +1,14 @@
 package data_access_objects;
 
 import java.sql.*;
+import java.util.List;
+
+import dataObjects.Pokemon;
+import dataObjects.Trainer;
 
 public class ProfessorController {
-	private ProfessorController professorControllerObject;
-	private ProfessorDAO professorDao;
+	private static ProfessorController professorControllerObject;
+	private static ProfessorDAO professorDao;
 	
 	
 	private ProfessorController(){
@@ -17,7 +21,7 @@ public class ProfessorController {
 		}
 	}
 	
-	public ProfessorController getInstance(){
+	public static ProfessorController getInstance(){
 		if (professorControllerObject == null){
 			professorControllerObject = new ProfessorController();
 		}
@@ -44,16 +48,15 @@ public class ProfessorController {
      * @param professors
      * @return
      */
-    public String getPokemons(String professor) {
-    	ResultSet result;
+    public List<Pokemon> getPokemons(String professor) {
+    	List<Pokemon> result;
 		try {
 			result = professorDao.showPokemons(professor);
-			//do something that converts ResultSet to string
-	    	String pokemons = result.getNString(0);
-	    	return pokemons;
+	    	return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return e.getMessage();
+			e.printStackTrace();
+			return null;
 		}
     }
     
@@ -62,16 +65,16 @@ public class ProfessorController {
      * @param professor
      * @return
      */
-    public String getTrainers(String professor) {
-    	ResultSet result;
+    public List<Trainer> getTrainers(String professor) {
+    	List<Trainer> result;
 		try {
 			result = professorDao.showTrainers(professor);
 			//do something that converts ResultSet to string
-	    	String trainers = result.getNString(0);
-	    	return trainers;
+	    	return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return e.getMessage();
+			e.printStackTrace();
+			return null;
 		}
     }
 }

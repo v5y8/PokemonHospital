@@ -1,7 +1,10 @@
 package data_access_objects;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import dataObjects.Pokemon;
 //singleton pattern DAO for accessing data.
 public class PokemonDAO {
 	private Connection con;
@@ -124,7 +127,7 @@ public class PokemonDAO {
 	 * @param pid
 	 * @throws SQLException
 	 */
-	public ResultSet retrievePokemons(int tid, int pid) throws SQLException {
+	public List<Pokemon> retrievePokemons(int tid, int pid) throws SQLException {
 
 		PreparedStatement ps = con.prepareStatement("SELECT * from pokemonName where"
 													+ "pid in ("
@@ -134,15 +137,20 @@ public class PokemonDAO {
 		ps.setInt(2, tid);
 		
 		ResultSet rs = ps.executeQuery();
-
-		// TODO: naomi look at this code; may help with controller.
-		// int rowCount = ps.executeUpdate();
-		// if (rowCount == 0)
-		// {
-		// System.out.println("\npokemon " + pokemon_id + " does not exist!");
-		// }
+		List<Pokemon> toReturn = new ArrayList<Pokemon>();
+		
+		while(rs.next()){
+			int poke_id = rs.getInt("PID");
+			String pname = rs.getString("PNAME");
+			int cp = rs.getInt("CP");
+			int hp = rs.getInt("HP");
+			String pokeball = rs.getString("POKEBALL");
+			Pokemon pokemon = new Pokemon(poke_id, pname, cp, hp, pokeball);
+			toReturn.add(pokemon);
+		}
+		
 		ps.close();
-		return rs;
+		return toReturn;
 	}
 
 	/**
@@ -179,7 +187,7 @@ public class PokemonDAO {
 	 */
 	public void freePokemon(int pid, int tid) throws SQLException {
 
-		PreparedStatement ps = con.prepareStatement("DELETE from pokemonBelongs  WHERE pid = ? AND tid = ?");
+		PreparedStatement ps = con.prepareStatement("DELETE from pokemonBelongs WHERE pid = ? AND tid = ?");
 		ps.setInt(1, pid);
 		ps.setInt(2, tid);
 
@@ -200,22 +208,23 @@ public class PokemonDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public ResultSet wildPokemon() throws SQLException{
-		PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemonName "
-													+ "WHERE pid not in("
-													+ "SELECT pid FROM pokemonBelongs);");
+	public List<Pokemon> wildPokemon() throws SQLException{
+		PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemonName WHERE pid not in(SELECT pid FROM pokemonBelongs)");
 
 		ResultSet rs = ps.executeQuery();
-
-		// // get info on ResultSet
-		// TODO:naomi look at this code for controller manipulation
-		// ResultSetMetaData rsmd = rs.getMetaData();
-		//
-		// // get number of columns
-		// int numCols = rsmd.getColumnCount();
-
+		List<Pokemon> toReturn = new ArrayList<Pokemon>();
+		while(rs.next()){
+			int pid = rs.getInt("PID");
+			String pname = rs.getString("PNAME");
+			int cp = rs.getInt("CP");
+			int hp = rs.getInt("HP");
+			String pokeball = rs.getString("POKEBALL");
+			Pokemon pokemon = new Pokemon(pid, pname, cp, hp, pokeball);
+			toReturn.add(pokemon);
+		}
+		
 		ps.close();
-		return rs;
+		return toReturn;
 	}
 
 }

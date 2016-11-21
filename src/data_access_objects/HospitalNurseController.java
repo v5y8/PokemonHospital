@@ -1,6 +1,10 @@
 package data_access_objects;
 
 import java.sql.*;
+import java.util.Dictionary;
+import java.util.List;
+
+import dataObjects.Pokemon;
 
 public class HospitalNurseController {
 	private HospitalNurseController hospitalNurseControllerObject;
@@ -48,16 +52,15 @@ public class HospitalNurseController {
      * @param nid
      * @return
      */
-    public String getPokemons(int nid) {
-    	ResultSet result;
+    public List<Pokemon> getPokemons(int nid) {
+    	List<Pokemon> result;
 		try {
 			result = hospitalnurseDao.showPokemons(nid);
-			//do something that converts ResultSet to string
-	    	String pokemon = result.getNString(0);
-	    	return pokemon;
+	    	return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return e.getMessage();
+			e.printStackTrace();
+			return null;
 		}
     }
     
@@ -65,16 +68,15 @@ public class HospitalNurseController {
      * 
      * @return
      */
-    public int getNurseLoad() {
-    	ResultSet result;
+    public Dictionary<Integer, Integer> getNurseLoad() {
+    	Dictionary<Integer, Integer> result;
 		try {
 			result = hospitalnurseDao.showNurseLoad();
-	    	int pokemon = result.getInt(0);
-	    	// TODO: not sure about getInt(0)
-	    	return pokemon;
+	    	return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return 0;
+			e.printStackTrace();
+			return null;
 		}
     }
     
@@ -82,16 +84,14 @@ public class HospitalNurseController {
      * 
      * @return
      */
-    public int getEggNum() {
-    	ResultSet result;
+    public Dictionary<Integer, Integer> getEggNum() {
+    	Dictionary<Integer, Integer> result;
 		try {
 			result = hospitalnurseDao.showIncubatorLoad();
-	    	int pokemon = result.getInt(0);
-	    	// TODO: not sure about getInt(0)
-	    	return pokemon;
+	    	return result;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			return 0;
+			e.printStackTrace();
+			return null;
 		}
     }
     
@@ -102,16 +102,15 @@ public class HospitalNurseController {
      * @param pid
      * @return
      */
-    public String getDepositPokemon(int nid, int tid, int pid) {
-    	ResultSet result;
+    public List<Pokemon> getDepositPokemon(int nid, int tid, int pid) {
+    	List<Pokemon> result;
 		try {
 			result = hospitalnurseDao.getTrainerPokemon(nid, tid, pid);
-			//do something that converts ResultSet to string
-	    	String pokemon = result.getNString(0);
-	    	return pokemon;
+	    	return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return e.getMessage();
+			e.printStackTrace();
+			return null;
 		}
     }
     

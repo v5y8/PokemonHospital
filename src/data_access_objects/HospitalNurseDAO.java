@@ -1,6 +1,13 @@
 package data_access_objects;
 
+import java.util.List;
+import java.util.Set;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import dataObjects.*;
 
 public class HospitalNurseDAO {
 	private Connection con;
@@ -239,22 +246,27 @@ public class HospitalNurseDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public ResultSet showPokemons(int nid) throws SQLException {
+	public List<Pokemon> showPokemons(int nid) throws SQLException {
 
-		PreparedStatement ps = con.prepareStatement("SELECT * FROM incubation WHERE nid = ?");
+		PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemonName WHERE pid in (SELECT PID from incubation WHERE nid = ?)");
 		ps.setInt(1, nid);
 
 		ResultSet rs = ps.executeQuery();
 
-		// // get info on ResultSet
-		// TODO:naomi look at this code for controller manipulation
-		// ResultSetMetaData rsmd = rs.getMetaData();
-		//
-		// // get number of columns
-		// int numCols = rsmd.getColumnCount();
-
+		List<Pokemon> toReturn = new ArrayList<Pokemon>();
+		
+		while(rs.next()){
+			int poke_id = rs.getInt("PID");
+			String pname = rs.getString("PNAME");
+			int cp = rs.getInt("CP");
+			int hp = rs.getInt("HP");
+			String pokeball = rs.getString("POKEBALL");
+			Pokemon pokemon = new Pokemon(poke_id, pname, cp, hp, pokeball);
+			toReturn.add(pokemon);
+		}
+		
 		ps.close();
-		return rs;
+		return toReturn;
 
 	}
 
@@ -264,40 +276,41 @@ public class HospitalNurseDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public ResultSet showNurseLoad() throws SQLException {
+	public Dictionary<Integer, Integer> showNurseLoad() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT nid, count(*) FROM incubation " + "group by nid");
 
 		ResultSet rs = ps.executeQuery();
-
-		// // get info on ResultSet
-		// TODO:naomi look at this code for controller manipulation
-		// ResultSetMetaData rsmd = rs.getMetaData();
-		//
-		// // get number of columns
-		// int numCols = rsmd.getColumnCount();
-
+		Dictionary<Integer, Integer> nurseLoad = new Hashtable<>();
+		
+		while(rs.next()){
+			int nid = rs.getInt("NID");
+			int load = rs.getInt("COUNT(*)");
+			nurseLoad.put(nid, load);
+			
+		}
 		ps.close();
-		return rs;
+		return nurseLoad;
 	}
 	/**
 	 * shows the # of pokemon under each incubator.
 	 * @return
 	 * @throws SQLException
 	 */
-	public ResultSet showIncubatorLoad() throws SQLException {
+	public Dictionary<Integer, Integer>  showIncubatorLoad() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT iid, count(*) FROM incubation " + "group by iid");
 
 		ResultSet rs = ps.executeQuery();
 
-		// // get info on ResultSet
-		// TODO:naomi look at this code for controller manipulation
-		// ResultSetMetaData rsmd = rs.getMetaData();
-		//
-		// // get number of columns
-		// int numCols = rsmd.getColumnCount();
-
+		Dictionary<Integer, Integer> incubatorLoad = new Hashtable<>();
+		
+		while(rs.next()){
+			int iid = rs.getInt("IID");
+			int load = rs.getInt("COUNT(*)");
+			incubatorLoad.put(iid, load);
+			
+		}
 		ps.close();
-		return rs;
+		return incubatorLoad;
 	}
 	
 	/**
@@ -309,20 +322,32 @@ public class HospitalNurseDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public ResultSet getTrainerPokemon(int nid, int tid, int pid) throws SQLException {
+	public List<Pokemon> getTrainerPokemon(int nid, int tid, int pid) throws SQLException {
 
-		PreparedStatement ps = con.prepareStatement("SELECT * from healPokemon where"
+		PreparedStatement ps = con.prepareStatement("select * from pokemonName"
+													+ "WHERE pid in(SELECT pid from healPokemon where"
 													+ "nid = ? AND pid in ("
-															+ "SELECT pid from pokemonBel"
-															+ "ongs"
+															+ "SELECT pid from pokemonBelongs"
 															+ "where pid = ? AND trainer_id = ?)");
 		ps.setInt(1, nid);
 		ps.setInt(2, pid);
 		ps.setInt(3, tid);
 		
 		ResultSet rs = ps.executeQuery();
+		List<Pokemon> toReturn = new ArrayList<Pokemon>();
+		
+		while(rs.next()){
+			int poke_id = rs.getInt("PID");
+			String pname = rs.getString("PNAME");
+			int cp = rs.getInt("CP");
+			int hp = rs.getInt("HP");
+			String pokeball = rs.getString("POKEBALL");
+			Pokemon pokemon = new Pokemon(poke_id, pname, cp, hp, pokeball);
+			toReturn.add(pokemon);
+		}
+		
 		ps.close();
-		return rs;
+		return toReturn;
 	}
 	
 	/**
