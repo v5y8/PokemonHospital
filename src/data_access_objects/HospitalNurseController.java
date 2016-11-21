@@ -131,4 +131,13 @@ public class HospitalNurseController {
 			e.getMessage();
 		}
     }
+    
+    
+    public void pickupPokemon(int tid, int pid, int nid) {
+    	Long currentTime = new java.util.Date().getTime();
+    	Long incubateTime = hospitalnurseDao.getHealTime(nid, pid).getTime();
+    	double differenceInHours = (incubateTime - currentTime)/(7.2*1000000);
+    	if (differenceInHours >= 2) {
+    		hospitalnurseDao.removeFromIncubator(pid);
+    }
 }

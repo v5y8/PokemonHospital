@@ -376,15 +376,17 @@ public class HospitalNurseDAO {
 	 * @param nid
 	 * @param pid
 	 */
-	public ResultSet getHealTime(int nid, int pid) throws SQLException {
+	public Timestamp getHealTime(int nid, int pid) throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT healdate from healPokemon WHERE nid = ? AND pid = ?");
 
 		ps.setInt(1, nid);
 		ps.setInt(2, pid);
 		
 		ResultSet rs = ps.executeQuery();
+		Timestamp toReturn = rs.getTimestamp(0);
+	
 		ps.close();
-		return rs;
+		return toReturn;
 	}
 	
 }
