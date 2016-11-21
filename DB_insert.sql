@@ -64,11 +64,11 @@ insert into incubation values(4,4,99);
 insert into incubation values(5,5,120);
 
 
-insert into healpokemon values(2,1);
-insert into healpokemon values(14,2);
-insert into healpokemon values(54,3);
-insert into healpokemon values(61,4);
-insert into healpokemon values(78,5);
+insert into healpokemon values(2,1,current_timestamp);
+insert into healpokemon values(14,2, current_timestamp);
+insert into healpokemon values(54,3, current_timestamp);
+insert into healpokemon values(61,4, current_timestamp);
+insert into healpokemon values(78,5, current_timestamp);
  
 insert into eggdeposit values(current_timestamp,86,1);
 insert into eggdeposit values(current_timestamp,90,2);

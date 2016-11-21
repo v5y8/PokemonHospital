@@ -29,8 +29,7 @@ Create table pokemonBelongs(
 		ON DELETE CASCADE);
 
 Create table professorTrades(
-	professor_name varchar(55) not null
-,
+	professor_name varchar(55) not null,
 	pid int,
 	trainer_id int,
 	PRIMARY KEY(professor_name, pid, trainer_id),
@@ -50,7 +49,7 @@ Create table hospital(
 		ON DELETE CASCADE);
 
 CREATE or REPLACE TRIGGER nurse_work
-	BEFORE update on nurse
+	AFTER update on nurse
 	FOR EACH ROW 
 	BEGIN
 	if :new.hname<>:old.hname
@@ -67,6 +66,7 @@ CREATE or REPLACE TRIGGER nurse_work
 create table healPokemon(
 	pid int not null,
 	nid int not null,
+	healdate TIMESTAMP not null,
 	FOREIGN KEY(pid)
 		references pokemonName
 		ON DELETE CASCADE,

@@ -156,11 +156,15 @@ public class HospitalNurseDAO {
 		PreparedStatement ps2 = con.prepareStatement("INSERT into incubator VALUES (?,?)");
 		ps2.setInt(1, iid);
 		ps2.setInt(2, pid);
+		//make a timestamp
+		
 		
 		//insert into healPokemon table
-		PreparedStatement ps3 = con.prepareStatement("INSERT into healPokemon VALUES (?,?)");
+		PreparedStatement ps3 = con.prepareStatement("INSERT into healPokemon VALUES (?,?,?)");
 		ps3.setInt(1, pid);
 		ps3.setInt(2, nid);
+		Timestamp timestamp = new java.sql.Timestamp(new java.util.Date().getTime());
+		ps3.setTimestamp(3, timestamp);
 		
 		
 		
