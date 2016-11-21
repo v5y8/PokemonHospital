@@ -63,10 +63,9 @@ public class HospitalNurseController {
     
     /**
      * 
-     * @param nid
      * @return
      */
-    public int getPokemonNum(int nid) {
+    public int getNurseLoad() {
     	ResultSet result;
 		try {
 			result = hospitalnurseDao.showNurseLoad();
@@ -81,10 +80,9 @@ public class HospitalNurseController {
     
     /**
      * 
-     * @param nid
      * @return
      */
-    public int getEggNum(int nid) {
+    public int getEggNum() {
     	ResultSet result;
 		try {
 			result = hospitalnurseDao.showIncubatorLoad();
