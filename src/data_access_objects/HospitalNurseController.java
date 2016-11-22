@@ -191,7 +191,26 @@ public class HospitalNurseController {
 	public void pickupPokemon(int tid, int pid, int nid) {
 		try {
 			Long currentTime = new java.util.Date().getTime();
-			Long incubateTime = hospitalnurseDao.getHealTime(nid, pid).getTime();
+			Long healTime = hospitalnurseDao.getHealTime(nid, pid).getTime();
+			double differenceInHours = (healTime - currentTime)/(7.2*1000000);
+			if (differenceInHours >= 2) {
+				hospitalnurseDao.removePokemon(pid);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param tid
+	 * @param pid
+	 */
+	public void pickupHatchedPokemon(int tid, int pid) {
+		try {
+			Long currentTime = new java.util.Date().getTime();
+			Long incubateTime = hospitalnurseDao.getHatchTime(pid, tid).getTime();
 			double differenceInHours = (incubateTime - currentTime)/(7.2*1000000);
 			if (differenceInHours >= 2) {
 				hospitalnurseDao.removeFromIncubator(pid);

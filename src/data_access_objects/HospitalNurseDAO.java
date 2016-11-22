@@ -88,7 +88,7 @@ public class HospitalNurseDAO {
 		ps.close();
 
 	}
-	
+
 	/**
 	 * return List of Nurse
 	 * 
@@ -169,7 +169,7 @@ public class HospitalNurseDAO {
 		ps.close();
 
 	}
-	
+
 	/**
 	 * return List of Incubator IDs
 	 * 
@@ -192,7 +192,7 @@ public class HospitalNurseDAO {
 		ps.close();
 		return toReturn;
 	}
-	
+
 	/**
 	 * puts pokemon into incubation under a nurse
 	 * @param pid
@@ -206,19 +206,19 @@ public class HospitalNurseDAO {
 		ps1.setInt(1, pid);
 		ps1.setInt(2, nid);
 		ps1.setInt(3, iid);
-		
+
 		//insert into Incubator table
 		PreparedStatement ps2 = con.prepareStatement("INSERT into incubator VALUES (?,?)");
 		ps2.setInt(1, iid);
 		ps2.setInt(2, pid);
-		
+
 		ps1.executeUpdate();
 		ps2.executeUpdate();
 		con.commit();
 		ps1.close();
 		ps2.close();
 	}
-	
+
 	/**
 	 * takes the relevant pokemon out of incubator, as well as out of incubation and healPokemon.
 	 * @param pid
@@ -228,23 +228,18 @@ public class HospitalNurseDAO {
 		//remove from incubation table
 		PreparedStatement ps1 = con.prepareStatement("DELETE from Incubation where pid = ?");
 		ps1.setInt(1, pid);
-		
+
 		//remove from Incubator table
 		PreparedStatement ps2 = con.prepareStatement("DELETE from incubator where pid = ?");
 		ps2.setInt(1, pid);
-		
-		//remove from healPokemon table
-		PreparedStatement ps3 = con.prepareStatement("DELETE from healPokemon where pid = ?");
-		ps3.setInt(1, pid);
-		
+
 		ps1.executeUpdate();
 		ps2.executeUpdate();
-		ps3.executeUpdate();
 		con.commit();
 		ps1.close();
 		ps2.close();
-		ps3.close();
 	}
+
 	/**
 	 * adds a new incubator to the table.
 	 * @param iid
@@ -275,7 +270,7 @@ public class HospitalNurseDAO {
 		ps.close();
 
 	}
-	
+
 	/**
 	 * deposit pokemon of pid to the care of nurse of nid
 	 * 
@@ -290,12 +285,27 @@ public class HospitalNurseDAO {
 		ps.setInt(2, nid);
 		Timestamp timestamp = new java.sql.Timestamp(new java.util.Date().getTime());
 		ps.setTimestamp(3, timestamp);
-		
+
 		ps.executeUpdate();
 		con.commit();
 		ps.close();
 	}
-	
+
+	/**
+	 * removes healed Pokemon from healPokemon
+	 * 
+	 * @param pid
+	 * @throws SQLException
+	 */
+	public void removePokemon(int pid) throws SQLException{
+		PreparedStatement ps = con.prepareStatement("DELETE from healPokemon where pid = ?");
+		
+		ps.setInt(1, pid);
+		ps.executeUpdate();
+		con.commit();
+		ps.close();
+	}
+
 	/**
 	 * returns the resultSet from all the pokemon managed by 1 nurse.
 	 * 
@@ -311,7 +321,7 @@ public class HospitalNurseDAO {
 		ResultSet rs = ps.executeQuery();
 
 		List<Pokemon> toReturn = new ArrayList<Pokemon>();
-		
+
 		while(rs.next()){
 			int poke_id = rs.getInt("PID");
 			String pname = rs.getString("PNAME");
@@ -321,7 +331,7 @@ public class HospitalNurseDAO {
 			Pokemon pokemon = new Pokemon(poke_id, pname, cp, hp, pokeball);
 			toReturn.add(pokemon);
 		}
-		
+
 		ps.close();
 		return toReturn;
 
@@ -338,12 +348,12 @@ public class HospitalNurseDAO {
 
 		ResultSet rs = ps.executeQuery();
 		Dictionary<Integer, Integer> nurseLoad = new Hashtable<>();
-		
+
 		while(rs.next()){
 			int nid = rs.getInt("NID");
 			int load = rs.getInt("COUNT(*)");
 			nurseLoad.put(nid, load);
-			
+
 		}
 		ps.close();
 		return nurseLoad;
@@ -359,17 +369,17 @@ public class HospitalNurseDAO {
 		ResultSet rs = ps.executeQuery();
 
 		Dictionary<Integer, Integer> incubatorLoad = new Hashtable<>();
-		
+
 		while(rs.next()){
 			int iid = rs.getInt("IID");
 			int load = rs.getInt("COUNT(*)");
 			incubatorLoad.put(iid, load);
-			
+
 		}
 		ps.close();
 		return incubatorLoad;
 	}
-	
+
 	/**
 	 * show pokemon deposited by trainer from healPokemon table.
 	 * 
@@ -382,17 +392,17 @@ public class HospitalNurseDAO {
 	public List<Pokemon> getTrainerPokemon(int nid, int tid) throws SQLException {
 
 		PreparedStatement ps = con.prepareStatement("SELECT * from pokemonName"
-													+ "WHERE pid in"
-														+ "(SELECT pid from healPokemon where"
-															+ "nid = ? AND pid in"
-																+ "(SELECT pid from pokemonBelongs"
-																	+ "WHERE trainer_id = ?))");
+				+ "WHERE pid in"
+				+ "(SELECT pid from healPokemon where"
+				+ "nid = ? AND pid in"
+				+ "(SELECT pid from pokemonBelongs"
+				+ "WHERE trainer_id = ?))");
 		ps.setInt(1, nid);
 		ps.setInt(2, tid);
-		
+
 		ResultSet rs = ps.executeQuery();
 		List<Pokemon> toReturn = new ArrayList<Pokemon>();
-		
+
 		while(rs.next()){
 			int poke_id = rs.getInt("PID");
 			String pname = rs.getString("PNAME");
@@ -402,11 +412,11 @@ public class HospitalNurseDAO {
 			Pokemon pokemon = new Pokemon(poke_id, pname, cp, hp, pokeball);
 			toReturn.add(pokemon);
 		}
-		
+
 		ps.close();
 		return toReturn;
 	}
-	
+
 	/**
 	 * updates pokemon with nurse
 	 * 
@@ -419,14 +429,14 @@ public class HospitalNurseDAO {
 
 		ps.setInt(1, nid);
 		ps.setInt(2, pid);
-		
+
 		ps.executeUpdate();
 		con.commit();
 
 		ps.close();
 
 	}
-	
+
 	/**
 	 * get healtime of pid under nid
 	 * 
@@ -438,12 +448,33 @@ public class HospitalNurseDAO {
 
 		ps.setInt(1, nid);
 		ps.setInt(2, pid);
-		
+
 		ResultSet rs = ps.executeQuery();
 		Timestamp toReturn = rs.getTimestamp(0);
-	
+
 		ps.close();
 		return toReturn;
 	}
-	
+
+	/**
+	 * get hatchtime of pid deposited by tid
+	 * 
+	 * @param pid
+	 * @param tid
+	 * @return
+	 * @throws SQLException
+	 */
+	public Timestamp getHatchTime(int pid, int tid) throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT eddate from eggDeposits WHERE tid = ? AND pid = ?");
+
+		ps.setInt(1, tid);
+		ps.setInt(2, pid);
+
+		ResultSet rs = ps.executeQuery();
+		Timestamp toReturn = rs.getTimestamp(0);
+
+		ps.close();
+		return toReturn;
+	}
+
 }
