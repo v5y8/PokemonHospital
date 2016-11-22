@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.Dictionary;
 import java.util.List;
 
+import dataObjects.Incubator;
 import dataObjects.Nurse;
 import dataObjects.Pokemon;
 import dataObjects.Professor;
@@ -54,17 +55,17 @@ public class HospitalNurseController {
 	 * @return
 	 */
 	public List<Nurse> getNurses() {
-    	List<Nurse> result;
-    	try {
+		List<Nurse> result;
+		try {
 			result = hospitalnurseDao.showNurse();
-	    	return result;
+			return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
-    }
-	
+	}
+
 	/**
 	 * 
 	 * @param nid
@@ -115,6 +116,23 @@ public class HospitalNurseController {
 
 	/**
 	 * 
+	 * @param pid
+	 * @param nid
+	 */
+	public void healPokemon(int pid, int nid) {
+		try {
+			int nurseLoad = hospitalnurseDao.showIncubatorLoad().get(nid);
+			if (nurseLoad < 6) {
+				hospitalnurseDao.depositPokemons(pid, nid);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
+		}
+	}
+
+	/**
+	 * 
 	 * @param nid
 	 * @param tid
 	 * @param pid
@@ -149,21 +167,27 @@ public class HospitalNurseController {
 			e.getMessage();
 		}
 	}
-        
-        public void deposit(int tid, int pid, int nid) {
-            	try {
+
+	public void deposit(int tid, int pid, int nid) {
+		try {
 			Dictionary<Integer,Integer> iLoad =hospitalnurseDao.showIncubatorLoad();
-                        Object a = iLoad.elements();
-                        Object keys = iLoad.keys();
-                        String k = keys.toString();
-                        hospitalnurseDao.putInIncubator(pid, nid, 1);
-                        hospitalnurseDao.updatePokemon(nid, pid);
+			Object a = iLoad.elements();
+			Object keys = iLoad.keys();
+			String k = keys.toString();
+			hospitalnurseDao.putInIncubator(pid, nid, 1);
+			hospitalnurseDao.updatePokemon(nid, pid);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.getMessage();
 		}
-        }
+	}
 
+	/**
+	 * 
+	 * @param tid
+	 * @param pid
+	 * @param nid
+	 */
 	public void pickupPokemon(int tid, int pid, int nid) {
 		try {
 			Long currentTime = new java.util.Date().getTime();
@@ -175,6 +199,22 @@ public class HospitalNurseController {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.getMessage();
+		}
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<Incubator> getIncubators() {
+		List<Incubator> result;
+    	try {
+			result = hospitalnurseDao.showIncubators();
+	    	return result;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
 	}
 
