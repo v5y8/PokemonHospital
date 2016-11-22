@@ -62,10 +62,11 @@ public class TrainerDAO {
 		List<Trainer> toReturn = new ArrayList<Trainer>();
 
 		while(rs.next()){
-			int tid = rs.getInt("TID");
-			String tname = rs.getString("NAME");
+			int tid = rs.getInt("trainer_id");
+			String tname = rs.getString("trainer_name");
 			Trainer trainer = new Trainer(tid, tname);
-			toReturn.add(trainer);
+			
+                        toReturn.add(trainer);
 		}
 
 		ps.close();

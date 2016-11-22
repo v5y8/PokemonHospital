@@ -18,9 +18,6 @@ public class DB_connector {
 			con = DriverManager.getConnection(CONNECTURL, USERNAME, PASSWORD);
 		}
 
-		else if (!con.isValid(10)) {
-			con = DriverManager.getConnection(CONNECTURL, USERNAME, PASSWORD);
-		}
 		return con;
 	}
 

@@ -9,11 +9,11 @@ import dataObjects.Pokemon;
 import dataObjects.Professor;
 
 public class HospitalNurseController {
-	private HospitalNurseController hospitalNurseControllerObject;
-	private HospitalNurseDAO hospitalnurseDao;
-	private PokemonDAO pokemonDao;
-	private ProfessorDAO professorDao;
-	private TrainerDAO trainerDao;
+	private static HospitalNurseController hospitalNurseControllerObject;
+	private static HospitalNurseDAO hospitalnurseDao;
+	private static PokemonDAO pokemonDao;
+	private static ProfessorDAO professorDao;
+	private static TrainerDAO trainerDao;
 
 
 	private HospitalNurseController(){
@@ -29,7 +29,7 @@ public class HospitalNurseController {
 		}
 	}
 
-	public HospitalNurseController getInstance(){
+	public static HospitalNurseController getInstance(){
 		if (hospitalNurseControllerObject == null){
 			hospitalNurseControllerObject = new HospitalNurseController();
 		}
@@ -120,10 +120,10 @@ public class HospitalNurseController {
 	 * @param pid
 	 * @return
 	 */
-	public List<Pokemon> getDepositPokemon(int nid, int tid, int pid) {
+	public List<Pokemon> getDepositPokemon(int nid, int tid) {
 		List<Pokemon> result;
 		try {
-			result = hospitalnurseDao.getTrainerPokemon(nid, tid, pid);
+			result = hospitalnurseDao.getTrainerPokemon(nid, tid);
 			return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -149,7 +149,20 @@ public class HospitalNurseController {
 			e.getMessage();
 		}
 	}
-
+        
+        public void deposit(int tid, int pid, int nid) {
+            	try {
+			Dictionary<Integer,Integer> iLoad =hospitalnurseDao.showIncubatorLoad();
+                        Object a = iLoad.elements();
+                        Object keys = iLoad.keys();
+                        String k = keys.toString();
+                        hospitalnurseDao.putInIncubator(pid, nid, 1);
+                        hospitalnurseDao.updatePokemon(nid, pid);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
+		}
+        }
 
 	public void pickupPokemon(int tid, int pid, int nid) {
 		try {
