@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dataObjects.Pokemon;
+import dataObjects.Professor;
 import dataObjects.Trainer;
 
 public class ProfessorDAO {
@@ -43,6 +44,29 @@ public class ProfessorDAO {
 
 		ps.close();
 
+	}
+
+	/**
+	 * return List of Professors
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Professor> showProfessors() throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT professor_name FROM professorTrades");
+
+		ResultSet rs = ps.executeQuery();
+
+		List<Professor> toReturn = new ArrayList<Professor>();
+
+		while(rs.next()){
+			String profname = rs.getString("NAME");
+			Professor professor = new Professor(profname);
+			toReturn.add(professor);
+		}
+
+		ps.close();
+		return toReturn;
 	}
 
 	/**
@@ -120,13 +144,13 @@ public class ProfessorDAO {
 	public List<Pokemon> showPokemons(String professor) throws SQLException {
 
 		PreparedStatement ps = con.prepareStatement("SELECT * FROM PokemonName WHERE pid in "
-													+ "(SELECT pid from professorTrades WHERE professor_name = ?)");
+				+ "(SELECT pid from professorTrades WHERE professor_name = ?)");
 		ps.setString(1, professor);
 
 		ResultSet rs = ps.executeQuery();
 
 		List<Pokemon> toReturn = new ArrayList<Pokemon>();
-		
+
 		while(rs.next()){
 			int poke_id = rs.getInt("PID");
 			String pname = rs.getString("PNAME");
@@ -136,7 +160,7 @@ public class ProfessorDAO {
 			Pokemon pokemon = new Pokemon(poke_id, pname, cp, hp, pokeball);
 			toReturn.add(pokemon);
 		}
-		
+
 		ps.close();
 		return toReturn;
 
@@ -150,19 +174,19 @@ public class ProfessorDAO {
 	public List<Trainer> showTrainers(String professor) throws SQLException {
 
 		PreparedStatement ps = con.prepareStatement("SELECT * FROM trainer WHERE trainer_id in "
-													+ "(SELECT Trainer_id from professorTrades WHERE professor_name = ?)");
+				+ "(SELECT Trainer_id from professorTrades WHERE professor_name = ?)");
 		ps.setString(1, professor);
 
 		ResultSet rs = ps.executeQuery();
 		List<Trainer> toReturn = new ArrayList<>();
-		
+
 		while(rs.next()){
 			int trainer_id = rs.getInt("TRAINER_ID");
 			String trainer_name = rs.getString("TRAINER_NAME");
 			Trainer trainer = new Trainer(trainer_id, trainer_name);
 			toReturn.add(trainer);
 		}
-		
+
 		ps.close();
 		return toReturn;
 

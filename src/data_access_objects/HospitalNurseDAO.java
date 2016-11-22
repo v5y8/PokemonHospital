@@ -88,6 +88,30 @@ public class HospitalNurseDAO {
 		ps.close();
 
 	}
+	
+	/**
+	 * return List of Nurse
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Nurse> showNurse() throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT * FROM nurse");
+
+		ResultSet rs = ps.executeQuery();
+
+		List<Nurse> toReturn = new ArrayList<Nurse>();
+
+		while(rs.next()){
+			int nid = rs.getInt("NID");
+			String hname = rs.getString("HNAME");
+			Nurse nurse = new Nurse(nid, hname);
+			toReturn.add(nurse);
+		}
+
+		ps.close();
+		return toReturn;
+	}
 
 	/**
 	 * deletes a nurse from a table.

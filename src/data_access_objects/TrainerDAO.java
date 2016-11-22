@@ -5,6 +5,8 @@ import java.util.*;
 
 import dataObjects.Egg;
 import dataObjects.Pokemon;
+import dataObjects.Professor;
+import dataObjects.Trainer;
 
 //singleton pattern DAO for accessing data.
 public class TrainerDAO {
@@ -44,6 +46,30 @@ public class TrainerDAO {
 
 		ps.close();
 
+	}
+	
+	/**
+	 * return List of Trainers
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Trainer> showTrainer() throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT * FROM trainer");
+
+		ResultSet rs = ps.executeQuery();
+
+		List<Trainer> toReturn = new ArrayList<Trainer>();
+
+		while(rs.next()){
+			int tid = rs.getInt("TID");
+			String tname = rs.getString("NAME");
+			Trainer trainer = new Trainer(tid, tname);
+			toReturn.add(trainer);
+		}
+
+		ps.close();
+		return toReturn;
 	}
 
 	/**
