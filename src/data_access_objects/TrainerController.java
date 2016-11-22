@@ -1,5 +1,7 @@
 package data_access_objects;
 
+import dataObjects.Egg;
+import dataObjects.Nurse;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import dataObjects.Trainer;
 public class TrainerController {
 	private static TrainerController trainerControllerObject;
 	private static TrainerDAO trainerDao;
+        private static HospitalNurseController hospitalNurseControllerObject;
 	
 	
 	private TrainerController(){
@@ -74,6 +77,38 @@ public class TrainerController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		}
+    }
+    
+    public List<Egg> viewEgg(int tid){
+            	List<Egg> result = new ArrayList<>();
+		try {
+			result = trainerDao.viewEgg(tid);
+	    	return result;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+    }
+    
+    public void getEgg(int tid) {
+        		try {
+                         List<Trainer> tList= trainerControllerObject.getTrainers();
+                         List<Pokemon> pms = new ArrayList<Pokemon>();
+                         for(Trainer t:tList) {
+                             pms =trainerControllerObject.getPokemons(t.getTrainer_id());
+                             for(int i=0;i<pms.size();i++) {
+                                  pms.add(getPokemons(t.getTrainer_id()).get(i));
+                             }
+                         }
+                         int index = (int)Math.random() *( pms.size()-1) ;
+                         
+			trainerDao.obtainEgg(tid, pms.get(index).getPid());
+	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
     }
     

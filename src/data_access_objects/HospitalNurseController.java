@@ -13,6 +13,7 @@ public class HospitalNurseController {
 	private static HospitalNurseController hospitalNurseControllerObject;
 	private static HospitalNurseDAO hospitalnurseDao;
 	private static PokemonDAO pokemonDao;
+        private static PokemonController pController;
 	private static ProfessorDAO professorDao;
 	private static TrainerDAO trainerDao;
 
@@ -209,6 +210,26 @@ public class HospitalNurseController {
 			double differenceInHours = (incubateTime - currentTime)/(7.2*1000000);
 			if (differenceInHours >= 2) {
 				hospitalnurseDao.removeFromIncubator(pid);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
+		}
+	}
+        
+        	/**
+	 * 
+	 * @param tid
+	 * @param pid
+	 */
+	public void pickupHatchedEgg(int tid, int eid) {
+		try {
+			Long currentTime = new java.util.Date().getTime();
+			Long incubateTime = hospitalnurseDao.getHatchTime(eid, tid).getTime();
+			double differenceInHours = (incubateTime - currentTime)/(7.2*1000000);
+			if (differenceInHours >= 24) {
+				hospitalnurseDao.removeFromIncubator(eid);
+                                pController.getPokemon(tid, eid);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
