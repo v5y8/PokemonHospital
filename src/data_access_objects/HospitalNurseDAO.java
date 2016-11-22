@@ -88,6 +88,30 @@ public class HospitalNurseDAO {
 		ps.close();
 
 	}
+	
+	/**
+	 * return List of Nurse
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Nurse> showNurse() throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT * FROM nurse");
+
+		ResultSet rs = ps.executeQuery();
+
+		List<Nurse> toReturn = new ArrayList<Nurse>();
+
+		while(rs.next()){
+			int nid = rs.getInt("NID");
+			String hname = rs.getString("HNAME");
+			Nurse nurse = new Nurse(nid, hname);
+			toReturn.add(nurse);
+		}
+
+		ps.close();
+		return toReturn;
+	}
 
 	/**
 	 * deletes a nurse from a table.
@@ -376,15 +400,17 @@ public class HospitalNurseDAO {
 	 * @param nid
 	 * @param pid
 	 */
-	public ResultSet getHealTime(int nid, int pid) throws SQLException {
+	public Timestamp getHealTime(int nid, int pid) throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT healdate from healPokemon WHERE nid = ? AND pid = ?");
 
 		ps.setInt(1, nid);
 		ps.setInt(2, pid);
 		
 		ResultSet rs = ps.executeQuery();
+		Timestamp toReturn = rs.getTimestamp(0);
+	
 		ps.close();
-		return rs;
+		return toReturn;
 	}
 	
 }

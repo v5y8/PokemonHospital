@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dataObjects.Pokemon;
+import dataObjects.Professor;
+import dataObjects.Trainer;
 
 public class TrainerController {
 	private static TrainerController trainerControllerObject;
@@ -39,6 +41,22 @@ public class TrainerController {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.getMessage();
+		}
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public List<Trainer> getTrainers() {
+    	List<Trainer> result;
+    	try {
+			result = trainerDao.showTrainer();
+	    	return result;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
     }
     

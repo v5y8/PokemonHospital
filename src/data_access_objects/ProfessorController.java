@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.List;
 
 import dataObjects.Pokemon;
+import dataObjects.Professor;
 import dataObjects.Trainer;
 
 public class ProfessorController {
@@ -40,6 +41,22 @@ public class ProfessorController {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.getMessage();
+		}
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public List<Professor> getProfessors() {
+    	List<Professor> result;
+    	try {
+			result = professorDao.showProfessors();
+	    	return result;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
     }
     
