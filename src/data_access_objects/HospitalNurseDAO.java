@@ -391,12 +391,7 @@ public class HospitalNurseDAO {
 	 */
 	public List<Pokemon> getTrainerPokemon(int nid, int tid) throws SQLException {
 
-		PreparedStatement ps = con.prepareStatement("SELECT * from pokemonName"
-				+ "WHERE pid in"
-				+ "(SELECT pid from healPokemon where"
-				+ "nid = ? AND pid in"
-				+ "(SELECT pid from pokemonBelongs"
-				+ "WHERE trainer_id = ?))");
+		PreparedStatement ps = con.prepareStatement("SELECT * from pokemonName WHERE pid in (SELECT pid from healPokemon where nid = ? AND pid in(SELECT pid from pokemonBelongs WHERE trainer_id = ?))");
 		ps.setInt(1, nid);
 		ps.setInt(2, tid);
 

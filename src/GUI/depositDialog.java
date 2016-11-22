@@ -144,7 +144,7 @@ public class depositDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         //handling ok
           HospitalNurseController tc = HospitalNurseController.getInstance();
-          tc.deposit(this.tid, this.pid, (int)this.jComboBox1.getSelectedItem());
+          tc.deposit(this.pid, (int)this.jComboBox1.getSelectedItem());
           this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 

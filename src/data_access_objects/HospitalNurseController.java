@@ -168,14 +168,9 @@ public class HospitalNurseController {
 		}
 	}
 
-	public void deposit(int tid, int pid, int nid) {
-		try {
-			Dictionary<Integer,Integer> iLoad =hospitalnurseDao.showIncubatorLoad();
-			Object a = iLoad.elements();
-			Object keys = iLoad.keys();
-			String k = keys.toString();
-			hospitalnurseDao.putInIncubator(pid, nid, 1);
-			hospitalnurseDao.updatePokemon(nid, pid);
+	public void deposit(int pid, int nid) {
+		try {		
+			hospitalnurseDao.depositPokemons(pid, nid);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.getMessage();

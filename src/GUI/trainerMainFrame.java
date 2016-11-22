@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import dataObjects.Nurse;
 import dataObjects.Pokemon;
 import data_access_objects.*;
 import java.util.ArrayList;
@@ -141,7 +142,22 @@ public class trainerMainFrame extends javax.swing.JFrame {
         TrainerController tc;
         tc = TrainerController.getInstance();
         List<Pokemon> pkm = tc.getPokemons(this.tid);
-     
+        HospitalNurseController hnc = HospitalNurseController.getInstance();
+        List<Nurse> ns =hnc.getNurses();
+            
+        for(Nurse n: ns){
+            int nid =n.getNurse_id();
+            List<Pokemon> pm =hnc.getPokemons(nid);
+            for(int i=0;i<pm.size();i++)
+            {
+                for(int j =0; j<pkm.size();j++){
+                 if(pkm.get(j).getPid()==pm.get(i).getPid())
+                    pkm.remove(pkm.get(j));
+                }
+
+            }
+        }
+       
 
         
         DefaultTableModel pkmModel = new DefaultTableModel(){
@@ -154,36 +170,38 @@ public class trainerMainFrame extends javax.swing.JFrame {
         pkmModel.setColumnCount(5);
         for(int i =0;i<pkm.size();i++)
         {
-           Object[] pkmData= {pkm.get(i).getPid(),pkm.get(i).getPname(), pkm.get(i).getCp(), pkm.get(i).getHP(),pkm.get(i).getPokeball()};
+            Object[] pkmData= {pkm.get(i).getPid(),pkm.get(i).getPname(), pkm.get(i).getCp(), pkm.get(i).getHP(),pkm.get(i).getPokeball()};
            pkmModel.addRow(pkmData);
         }
 
          this.jTable1.setModel(pkmModel);
          pkmModel.fireTableDataChanged();
          this.jTable1.setEnabled(true);
-         this.depositButton.setEnabled(true);
-         this.pickUpButton.setEnabled(true);
-         this.displayPokemonButton.setEnabled(true);
-         this.tradeButton.setEnabled(true);
-         this.transferButton.setEnabled(true);
-        
+
+         setButtonEnabled(true);
     }//GEN-LAST:event_displayPokemonButtonActionPerformed
 
+    private void setButtonEnabled(boolean a){
+         this.depositButton.setEnabled(a);
+         this.pickUpButton.setEnabled(a);
+         this.tradeButton.setEnabled(a);
+         this.transferButton.setEnabled(a);
+    }
     private void depositButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_depositButtonActionPerformed
         // TODO add your handling code here:
        int selected_row = this.jTable1.getSelectedRow();
        Object selected_pid = this.jTable1.getModel().getValueAt(selected_row, 0);
        depositDialog dg = new depositDialog(this, true,(int) selected_pid, this.tid);
        dg.setVisible(true);
-      this.jTable1.setEnabled(false);
-       
+
+        setButtonEnabled(false);
     }//GEN-LAST:event_depositButtonActionPerformed
 
     private void pickUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pickUpButtonActionPerformed
         // TODO add your handling code here:
         returnPokemon rtD = new returnPokemon(this,true, this.tid);
         rtD.setVisible(true);
-        this.jTable1.setEnabled(false);
+      setButtonEnabled(false);
     }//GEN-LAST:event_pickUpButtonActionPerformed
 
     private void transferButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transferButtonActionPerformed
@@ -193,7 +211,7 @@ public class trainerMainFrame extends javax.swing.JFrame {
        if((int) selected_row>=0){
        TransferDialog tfD = new TransferDialog(this, true,(int) selected_pid, this.tid);
        tfD.setVisible(true);
-       this.jTable1.setEnabled(false);
+        setButtonEnabled(false);
        }
 
     }//GEN-LAST:event_transferButtonActionPerformed
@@ -205,7 +223,8 @@ public class trainerMainFrame extends javax.swing.JFrame {
        if((int) selected_row>=0){
        TradeDialog tfD = new TradeDialog(this, true,(int) selected_pid, this.tid, "Trainer");
        tfD.setVisible(true);
-        this.jTable1.setEnabled(false);}
+             setButtonEnabled(false);
+     }
     }//GEN-LAST:event_tradeButtonActionPerformed
 
 

@@ -4,18 +4,26 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/dataObjects/Pokemon.java</file>
-            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/GUI/trainerMainFrame.java</file>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/dataObjects/Trainer.java</file>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/GUI/depositDialog.java</file>
+            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/GUI/trainerMainFrame.java</file>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/data_access_objects/trial_DB.java</file>
+            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/data_access_objects/HospitalNurseDAO.java</file>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/data_access_objects/TrainerController.java</file>
+            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/data_access_objects/ProfessorController.java</file>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/data_access_objects/PokemonDAO.java</file>
-            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/GUI/professorMainFrame.java</file>
+            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/GUI/TransferDialog.java</file>
+            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/dataObjects/Nurse.java</file>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/data_access_objects/DB_connector.java</file>
+            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/GUI/TradeDialog.java</file>
+            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/data_access_objects/PokemonController.java</file>
+            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/nbproject/build-impl.xml</file>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/data_access_objects/HospitalNurseController.java</file>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/data_access_objects/TrainerDAO.java</file>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/GUI/loginDialog.java</file>
             <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/GUI/nurseMainFrame.java</file>
+            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/dataObjects/Egg.java</file>
+            <file>file:/C:/Users/Edward/Desktop/CPSC304/Project/PokemonHospital/src/GUI/returnPokemon.java</file>
         </group>
     </open-files>
 </project-private>

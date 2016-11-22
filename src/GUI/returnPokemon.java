@@ -8,7 +8,7 @@ package GUI;
 import dataObjects.Nurse;
 import dataObjects.Pokemon;
 import data_access_objects.HospitalNurseController;
-import java.util.Dictionary;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 
@@ -22,6 +22,7 @@ public class returnPokemon extends javax.swing.JDialog {
      * Creates new form returnPokemon
      */
     int pid,tid;
+    int[] nid;
     public returnPokemon(java.awt.Frame parent, boolean modal, int tid) {
         super(parent, modal);
         initComponents();
@@ -32,21 +33,27 @@ public class returnPokemon extends javax.swing.JDialog {
      private void setPokemonModel(){
      
        HospitalNurseController nc = HospitalNurseController.getInstance();
-
+       
        List<Nurse> ns =nc.getNurses();
-       List<Pokemon> pokemons = null;
+       List<Pokemon> pokemons = new ArrayList<Pokemon>();
+       int j=0;
+       nid = new int[1000];
        for(int i =0; i< ns.size();i++)
-       {
-           pokemons = nc.getDepositPokemon(i, this.tid);
+       {   
+           
+           List<Pokemon> pml = nc.getDepositPokemon(i, this.tid);
+           for(int k=0;k<pml.size();k++)
+           {
+               this.nid[j]=ns.get(i).getNurse_id();
+               if(pml.get(k)!=null)
+               pokemons.add(pml.get(k));
+               j++;
+           }
        }
-           DefaultComboBoxModel pkmModel = new  DefaultComboBoxModel();
+       DefaultComboBoxModel pkmModel = new  DefaultComboBoxModel();
        for(int i = 0; i< pokemons.size(); i++)
        {
           pkmModel.addElement(pokemons.get(i).getPid());
-       }
-       
-       if(pkmModel == null) {
-           pkmModel.addElement("EMPTY");
        }
        
         this.jComboBox1.setModel(pkmModel);
@@ -145,13 +152,14 @@ public class returnPokemon extends javax.swing.JDialog {
         else
         {
             HospitalNurseController nc = HospitalNurseController.getInstance();
-            
+            nc.pickupPokemon(this.tid,(int)this.jComboBox1.getSelectedItem(),nid[this.jComboBox1.getSelectedIndex()]);
+            System.out.println(this.tid+"  "+(int)this.jComboBox1.getSelectedItem()+"  "+nid[this.jComboBox1.getSelectedIndex()]);
         }
+                this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
