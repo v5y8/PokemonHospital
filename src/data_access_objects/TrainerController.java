@@ -7,8 +7,8 @@ import java.util.List;
 import dataObjects.Pokemon;
 
 public class TrainerController {
-	private TrainerController trainerControllerObject;
-	private TrainerDAO trainerDao;
+	private static TrainerController trainerControllerObject;
+	private static TrainerDAO trainerDao;
 	
 	
 	private TrainerController(){
@@ -21,7 +21,7 @@ public class TrainerController {
 		}
 	}
 	
-	public TrainerController getInstance(){
+	public static TrainerController getInstance(){
 		if (trainerControllerObject == null){
 			trainerControllerObject = new TrainerController();
 		}

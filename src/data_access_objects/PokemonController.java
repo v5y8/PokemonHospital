@@ -21,7 +21,7 @@ public class PokemonController {
 		}
 	}
 	
-	public PokemonController getInstance(){
+	public static PokemonController getInstance(){
 		if (pokemonControllerObject ==null){
 			pokemonControllerObject = new PokemonController();
 		}
