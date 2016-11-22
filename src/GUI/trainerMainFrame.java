@@ -88,6 +88,11 @@ public class trainerMainFrame extends javax.swing.JFrame {
         });
 
         tradeButton.setText("Trade");
+        tradeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tradeButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -136,7 +141,7 @@ public class trainerMainFrame extends javax.swing.JFrame {
         TrainerController tc;
         tc = TrainerController.getInstance();
         List<Pokemon> pkm = tc.getPokemons(this.tid);
-        System.out.println(pkm.get(0).getPname()+"ll"+pkm.size());
+     
 
         
         DefaultTableModel pkmModel = new DefaultTableModel(){
@@ -152,9 +157,15 @@ public class trainerMainFrame extends javax.swing.JFrame {
            Object[] pkmData= {pkm.get(i).getPid(),pkm.get(i).getPname(), pkm.get(i).getCp(), pkm.get(i).getHP(),pkm.get(i).getPokeball()};
            pkmModel.addRow(pkmData);
         }
+
          this.jTable1.setModel(pkmModel);
          pkmModel.fireTableDataChanged();
-
+         this.jTable1.setEnabled(true);
+         this.depositButton.setEnabled(true);
+         this.pickUpButton.setEnabled(true);
+         this.displayPokemonButton.setEnabled(true);
+         this.tradeButton.setEnabled(true);
+         this.transferButton.setEnabled(true);
         
     }//GEN-LAST:event_displayPokemonButtonActionPerformed
 
@@ -164,7 +175,7 @@ public class trainerMainFrame extends javax.swing.JFrame {
        Object selected_pid = this.jTable1.getModel().getValueAt(selected_row, 0);
        depositDialog dg = new depositDialog(this, true,(int) selected_pid, this.tid);
        dg.setVisible(true);
-      
+      this.jTable1.setEnabled(false);
        
     }//GEN-LAST:event_depositButtonActionPerformed
 
@@ -172,6 +183,7 @@ public class trainerMainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         returnPokemon rtD = new returnPokemon(this,true, this.tid);
         rtD.setVisible(true);
+        this.jTable1.setEnabled(false);
     }//GEN-LAST:event_pickUpButtonActionPerformed
 
     private void transferButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transferButtonActionPerformed
@@ -181,13 +193,20 @@ public class trainerMainFrame extends javax.swing.JFrame {
        if((int) selected_row>=0){
        TransferDialog tfD = new TransferDialog(this, true,(int) selected_pid, this.tid);
        tfD.setVisible(true);
+       this.jTable1.setEnabled(false);
        }
 
     }//GEN-LAST:event_transferButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void tradeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tradeButtonActionPerformed
+        // TODO add your handling code here:
+       int selected_row = this.jTable1.getSelectedRow();
+       Object selected_pid = this.jTable1.getModel().getValueAt(selected_row, 0);
+       if((int) selected_row>=0){
+       TradeDialog tfD = new TradeDialog(this, true,(int) selected_pid, this.tid, "Trainer");
+       tfD.setVisible(true);
+        this.jTable1.setEnabled(false);}
+    }//GEN-LAST:event_tradeButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -201,3 +220,4 @@ public class trainerMainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }
+

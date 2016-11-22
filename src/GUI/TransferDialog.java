@@ -23,6 +23,7 @@ public class TransferDialog extends javax.swing.JDialog {
         this.tid=tid;
         this.pid=pid;
         this.jLabel3.setText(this.jLabel3.getText()+this.pid);
+        
     }
 
     TransferDialog(trainerMainFrame aThis, boolean b, int i) {

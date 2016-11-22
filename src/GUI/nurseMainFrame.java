@@ -59,6 +59,11 @@ public class nurseMainFrame extends javax.swing.JFrame {
         jLabel1.setText("Nurse Panel");
 
         jButton1.setText("Swap");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("View Your Pokemons");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -126,6 +131,16 @@ public class nurseMainFrame extends javax.swing.JFrame {
          this.jTable1.setModel(pkmModel);
          pkmModel.fireTableDataChanged();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+       int selected_row = this.jTable1.getSelectedRow();
+       Object selected_pid = this.jTable1.getModel().getValueAt(selected_row, 0);
+       if((int) selected_row>=0){
+       TradeDialog tfD = new TradeDialog(this, true,(int) selected_pid, this.nid, "Nurse");
+       tfD.setVisible(true);
+       this.jTable1.setEnabled(false);}
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
