@@ -363,7 +363,7 @@ public class HospitalNurseDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Dictionary<Integer, Integer> showAvailableNurses() throws SQLException {
+	public List<Nurse> showAvailableNurses() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT * from nurse "
 													+ "where nid in"
 													+ "(select nid from healPokemon"
@@ -371,16 +371,15 @@ public class HospitalNurseDAO {
 													+ "having count(nid)<6");
 
 		ResultSet rs = ps.executeQuery();
-		Dictionary<Integer, Integer> nurseLoad = new Hashtable<>();
+		List<Nurse> toReturn = new ArrayList<>();;
 
 		while(rs.next()){
-			int nid = rs.getInt("NID");
-			int load = rs.getInt("COUNT(*)");
-			nurseLoad.put(nid, load);
+			Nurse toAdd = new Nurse(rs.getInt("NID"), rs.getString("HNAME"));
+			toReturn.add(toAdd);
 
 		}
 		ps.close();
-		return nurseLoad;
+		return toReturn;
 	}
 	
 	/**
