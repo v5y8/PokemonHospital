@@ -359,6 +359,31 @@ public class HospitalNurseDAO {
 		return nurseLoad;
 	}
 	/**
+	 * shows all available nurses with less than 6 pokemon to care for.
+	 * @return
+	 * @throws SQLException
+	 */
+	public Dictionary<Integer, Integer> showAvailableNurses() throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT * from nurse "
+													+ "where nid in"
+													+ "(select nid from healPokemon"
+													+ "group by nid"
+													+ "having count(nid)<6");
+
+		ResultSet rs = ps.executeQuery();
+		Dictionary<Integer, Integer> nurseLoad = new Hashtable<>();
+
+		while(rs.next()){
+			int nid = rs.getInt("NID");
+			int load = rs.getInt("COUNT(*)");
+			nurseLoad.put(nid, load);
+
+		}
+		ps.close();
+		return nurseLoad;
+	}
+	
+	/**
 	 * shows the # of pokemon under each incubator.
 	 * @return
 	 * @throws SQLException
@@ -445,6 +470,7 @@ public class HospitalNurseDAO {
 		ps.setInt(2, pid);
 
 		ResultSet rs = ps.executeQuery();
+		
 		Timestamp toReturn = rs.getTimestamp(0);
 
 		ps.close();
