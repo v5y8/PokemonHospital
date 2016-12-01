@@ -40,14 +40,8 @@ public class depositDialog extends javax.swing.JDialog {
     }
     private void setNurseModel(){
        HospitalNurseController nc = HospitalNurseController.getInstance();
-       List<Nurse> nurses = nc.getNurses();
-       Dictionary<Integer,Integer> nurseLoads = nc.getNurseLoad();
-       for(int i = 0; i< nurses.size(); i++)
-       {
-           if (nurseLoads.get(nurses.get(i).getNurse_id())>=6)
-               //only need not full nurses
-               nurses.remove(nurses.get(i));
-       }
+       List<Nurse> nurses = nc.getAvailableNurses();
+      
        
       DefaultComboBoxModel pkmModel = new  DefaultComboBoxModel();
         for(int i =0;i<nurses.size();i++)

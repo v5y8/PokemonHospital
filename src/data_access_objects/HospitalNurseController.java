@@ -99,6 +99,19 @@ public class HospitalNurseController {
 			return null;
 		}
 	}
+	public List<Nurse> getAvailableNurses(){
+		
+		List<Nurse> result;
+		try {
+			result = hospitalnurseDao.showAvailableNurses();
+			return result;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 
 	/**
 	 * 

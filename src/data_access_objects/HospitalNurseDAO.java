@@ -364,14 +364,10 @@ public class HospitalNurseDAO {
 	 * @throws SQLException
 	 */
 	public List<Nurse> showAvailableNurses() throws SQLException {
-		PreparedStatement ps = con.prepareStatement("SELECT * from nurse "
-													+ "where nid in"
-													+ "(select nid from healPokemon"
-													+ "group by nid"
-													+ "having count(nid)<6");
+		PreparedStatement ps = con.prepareStatement("SELECT * from nurse where nid in (select nid from healPokemon group by nid having count(nid)<6)");
 
 		ResultSet rs = ps.executeQuery();
-		List<Nurse> toReturn = new ArrayList<>();;
+		List<Nurse> toReturn = new ArrayList<>();
 
 		while(rs.next()){
 			Nurse toAdd = new Nurse(rs.getInt("NID"), rs.getString("HNAME"));
